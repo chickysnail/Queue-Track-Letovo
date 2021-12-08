@@ -1,31 +1,49 @@
-from telegram.ext import Updater, CommandHandler, CallbackContext
-from telegram import Update
+import logging
+
+from telegram import Update, ForceReply
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+import requests
+import getPhoto, imageConverter
+
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
+)
+
+logger = logging.getLogger(__name__)
 
 
-def help(update: Update, context: CallbackContext):
-    help_text = 'There will be no help for you, figure it out yourself'
-    update.message.reply_text(help_text)
+def start(update: Update, context: CallbackContext) -> None:
+    user = update.effective_user
+    update.message.reply_markdown_v2(fr'Hi {user.mention_markdown_v2()}\!')
 
-def queue(update: Update, context: CallbackContext):
-    pass
 
-TOKEN = "2082795270:AAHLwx1DaetOsPu3u4O8iOWa6fF3ysazL8E"
+def help_command(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text('Help!')
 
-def main():
-    updater: Updater = Updater(TOKEN, use_context=True)
+
+def authors(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text("@FrostDeath, @mikhailandri, @chickysnail")
+
+
+def request_queue(update: Update, context: CallbackContext) -> None:
+    photo = getPhoto.get(last=-1)
+    update.message.reply_photo(photo)
+
+
+def main() -> None:
+    updater = Updater("2129247987:AAHdzOCLztXr19IH_KKostgsQ8xZmdYxDCk")  # Tocken of Bot
+
     dispatcher = updater.dispatcher
 
-    # get help
-    help_handler = CommandHandler("help", help)
-    dispatcher.add_handler(help_handler)
-
-    # get queue
-    get_queue_handler = CommandHandler("queue", queue)
-    dispatcher.add_handler(get_queue_handler)
+    dispatcher.add_handler(CommandHandler("start", start))
+    dispatcher.add_handler(CommandHandler("help", help_command))
+    dispatcher.add_handler(CommandHandler("request_queue", request_queue))
+    dispatcher.add_handler(CommandHandler("authors", authors))
 
     updater.start_polling()
+
     updater.idle()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
