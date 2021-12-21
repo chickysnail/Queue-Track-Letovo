@@ -31,13 +31,13 @@ def request_queue(update: Update, context: CallbackContext) -> None:
 
 
 def main() -> None:
-    updater = Updater("2129247987:AAHdzOCLztXr19IH_KKostgsQ8xZmdYxDCk")  # Tocken of Bot
+    updater = Updater("2082795270:AAHLwx1DaetOsPu3u4O8iOWa6fF3ysazL8E")  # Tocken of Bot
 
     dispatcher = updater.dispatcher
 
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("help", help_command))
-    dispatcher.add_handler(CommandHandler("request_queue", request_queue))
+    dispatcher.add_handler(CommandHandler("queue", request_queue))
     dispatcher.add_handler(CommandHandler("authors", authors))
 
     updater.start_polling()
